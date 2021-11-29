@@ -1,6 +1,27 @@
 use std::fmt::{Display, Error, Formatter};
 fn main() {
-    let test = Graph::new((-5., 5.), (-5., 5.), 0.025, |x, y| x.sin() - y);
+    let args = std::env::args().collect::<Vec<String>>();
+    let test = Graph::new(
+        (
+            args.get(1)
+                .unwrap_or(&"".to_string())
+                .parse()
+                .unwrap_or(-5.),
+            args.get(2).unwrap_or(&"".to_string()).parse().unwrap_or(5.),
+        ),
+        (
+            args.get(3)
+                .unwrap_or(&"".to_string())
+                .parse()
+                .unwrap_or(-5.),
+            args.get(4).unwrap_or(&"".to_string()).parse().unwrap_or(5.),
+        ),
+        args.get(5)
+            .unwrap_or(&"".to_string())
+            .parse()
+            .unwrap_or(0.025),
+        |x, y| x.sin() - y,
+    );
 
     println!("{}", test);
 }
