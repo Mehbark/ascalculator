@@ -2,28 +2,21 @@ use std::fmt::{Display, Error, Formatter};
 fn main() {
     let args = std::env::args().collect::<Vec<String>>();
     let test = Graph::new(
-        (
-            args.get(1)
-                .unwrap_or(&"".to_string())
-                .parse()
-                .unwrap_or(-5.),
-            args.get(2).unwrap_or(&"".to_string()).parse().unwrap_or(5.),
-        ),
-        (
-            args.get(3)
-                .unwrap_or(&"".to_string())
-                .parse()
-                .unwrap_or(-5.),
-            args.get(4).unwrap_or(&"".to_string()).parse().unwrap_or(5.),
-        ),
-        args.get(5)
-            .unwrap_or(&"".to_string())
-            .parse()
-            .unwrap_or(0.025),
+        (argument(&args, 1, -5.0), argument(&args, 2, 5.0)),
+        (argument(&args, 3, -5.0), argument(&args, 4, 5.0)),
+        argument(&args, 5, 0.025),
         |x, y| x.sin() - y,
     );
 
     println!("{}", test);
+}
+
+fn argument(args: &[String], at: usize, default: f64) -> f64 {
+    unwrap_argument(args.get(at), default)
+}
+
+fn unwrap_argument(arg: Option<&String>, default: f64) -> f64 {
+    arg.unwrap_or(&"".to_string()).parse().unwrap_or(default)
 }
 
 type Bounds = (f64, f64);
